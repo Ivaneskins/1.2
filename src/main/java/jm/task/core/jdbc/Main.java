@@ -14,8 +14,11 @@ public class Main {
 //        userDaoJDBC1.dropUsersTable();
 
         //clean table
-        UserDaoJDBCImpl userDaoJDBC2 = new UserDaoJDBCImpl();
-        userDaoJDBC2.cleanUsersTable();
+//        UserDaoJDBCImpl userDaoJDBC2 = new UserDaoJDBCImpl();
+//        userDaoJDBC2.cleanUsersTable();
+
+        UserDaoJDBCImpl userDaoJDBC3 = new UserDaoJDBCImpl();
+        userDaoJDBC3.saveUser("Ivan", "Vas", (byte)35);
 
     }
 }

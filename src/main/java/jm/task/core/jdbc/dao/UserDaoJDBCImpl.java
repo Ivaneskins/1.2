@@ -29,7 +29,7 @@ public class UserDaoJDBCImpl implements UserDao {
             stmt = conn.createStatement();
 
             String sql = "CREATE TABLE IF NOT EXISTS REGISTRATION " +
-                    "(id INTEGER not NULL, " +
+                    "(id INTEGER not NULL AUTO_INCREMENT, " +
                     " first VARCHAR(255), " +
                     " last VARCHAR(255), " +
                     " age INTEGER, " +
@@ -43,17 +43,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         } finally {
             //finally block used to close resources
-            try {
-                if (stmt != null)
-                    conn.close();
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
+            finalDontRepeat();
         }
     }
 
@@ -71,21 +61,26 @@ public class UserDaoJDBCImpl implements UserDao {
             se.printStackTrace();
         } finally {
             //finally block used to close resources
-            try {
-                if (stmt != null)
-                    conn.close();
-            } catch (SQLException se) {
-            }// do nothing
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
+            finalDontRepeat();
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte ageUser) {
+        try {
+            System.out.println("Starting add user...");
+            stmt = conn.createStatement();
+            String sql = "INSERT INTO registration(id, first, ageUser) " +
+                    " values (first, last, age) ";
+            stmt.executeUpdate(sql);
+            System.out.println("User added successful");
+            System.out.println("------------------------------");
+        } catch (SQLException sqle) {
+//            System.out.println("User added exception");
+            sqle.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            finalDontRepeat();
+        }
 
     }
 
@@ -107,6 +102,23 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("------------------------------");
         } catch (SQLException sqle) {
             System.out.println("Clean table exception");
+        } finally {
+            //finally block used to close resources
+            finalDontRepeat();
         }
+    }
+
+    public void finalDontRepeat() {
+        try {
+            if (stmt != null)
+                conn.close();
+        } catch (SQLException se) {
+        }// do nothing
+        try {
+            if (conn != null)
+                conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }//end finally try
     }
 }
