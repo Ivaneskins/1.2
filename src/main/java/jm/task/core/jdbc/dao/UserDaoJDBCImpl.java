@@ -3,10 +3,8 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -103,7 +101,33 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        return null;
+
+        List<User> users = new ArrayList<>();
+        try {
+            System.out.println("Getting all users...");
+            stmt = conn.createStatement();
+
+            String sql = "SELECT * FROM registration";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                long id = rs.getInt(1);
+                String name = rs.getString(2);
+                String lastName = rs.getString(3);
+                byte age = rs.getByte(4);
+                User user = new User(name, lastName, age);
+                user.setId(id);
+                users.add(user);
+            }
+            System.out.println("All users get successful");
+            System.out.println("------------------------------");
+        } catch (SQLException sqle) {
+            System.out.println("Get users exception");
+            sqle.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            finalDontRepeat();
+        }
+        return users;
     }
 
     public void cleanUsersTable() {

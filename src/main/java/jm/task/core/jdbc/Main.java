@@ -1,28 +1,40 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
         // реализуйте алгоритм здесь
-        //create table
-//        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-//        userDaoJDBC.createUsersTable();
 
-        //drop table
-//        UserDaoJDBCImpl userDaoJDBC1 = new UserDaoJDBCImpl();
-//        userDaoJDBC1.dropUsersTable();
+        //1 create table
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.createUsersTable();
 
-        //clean table
-//        UserDaoJDBCImpl userDaoJDBC2 = new UserDaoJDBCImpl();
-//        userDaoJDBC2.cleanUsersTable();
+        //2 add 4 users
+        UserServiceImpl userService3 = new UserServiceImpl();
+        userService3.saveUser("Ivan", "Vas", (byte)35);
+        userService3 = new UserServiceImpl();
+        userService3.saveUser("Sofia", "Vas", (byte)35);
+        userService3 = new UserServiceImpl();
+        userService3.saveUser("Fil", "Suv", (byte)35);
+        userService3 = new UserServiceImpl();
+        userService3.saveUser("Artem", "Ki", (byte)35);
 
-        //add user
-//        UserDaoJDBCImpl userDaoJDBC3 = new UserDaoJDBCImpl();
-//        userDaoJDBC3.saveUser("Test", "You", (byte)80);
+        //3 get all users
+        UserServiceImpl userService5 = new UserServiceImpl();
+        userService5.getAllUsers().stream().forEach(System.out::println);
 
-        UserDaoJDBCImpl userDaoJDBC4 = new UserDaoJDBCImpl();
-        userDaoJDBC4.removeUserById(1);
+        //4 clean table
+        UserServiceImpl userService2 = new UserServiceImpl();
+        userService2.cleanUsersTable();
 
+        //5 drop table
+        UserServiceImpl userService1 = new UserServiceImpl();
+        userService1.dropUsersTable();
+
+        //Delete user by id
+//        UserServiceImpl userService4 = new UserServiceImpl();
+//        userService1.removeUserById(1);
     }
 }
