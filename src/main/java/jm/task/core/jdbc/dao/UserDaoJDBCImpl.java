@@ -4,6 +4,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -29,11 +30,11 @@ public class UserDaoJDBCImpl implements UserDao {
             stmt = conn.createStatement();
 
             String sql = "CREATE TABLE IF NOT EXISTS REGISTRATION " +
-                    "(id INTEGER not NULL AUTO_INCREMENT, " +
+                    "(id INTEGER NOT NULL AUTO_INCREMENT, " +
                     " first VARCHAR(255), " +
                     " last VARCHAR(255), " +
                     " age INTEGER, " +
-                    " PRIMARY KEY ( id ))";
+                    " PRIMARY KEY (id))";
 
             stmt.executeUpdate(sql);
             System.out.println("Created table in given database...");
@@ -65,13 +66,15 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte ageUser) {
+    public void saveUser(String name, String lastName, byte age) {
         try {
             System.out.println("Starting add user...");
-            stmt = conn.createStatement();
-            String sql = "INSERT INTO registration(id, first, ageUser) " +
-                    " values (first, last, age) ";
-            stmt.executeUpdate(sql);
+            String sql = "INSERT INTO registration(first, last, age) VALUES (?, ?, ?)";
+            PreparedStatement prepStmt = conn.prepareStatement(sql);
+            prepStmt.setString(1, name);
+            prepStmt.setString(2, lastName);
+            prepStmt.setByte(3, age);
+            prepStmt.executeUpdate();
             System.out.println("User added successful");
             System.out.println("------------------------------");
         } catch (SQLException sqle) {
@@ -81,11 +84,22 @@ public class UserDaoJDBCImpl implements UserDao {
             //finally block used to close resources
             finalDontRepeat();
         }
-
     }
 
     public void removeUserById(long id) {
 
+        try {
+            System.out.println("Remove user started...");
+            String sql = "DELETE * FROM registration WHERE id=" + id;
+            stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+            System.out.println("Remove user is done");
+        } catch (SQLException sqle) {
+            System.out.println("Remove user not happened");
+            sqle.printStackTrace();
+        } finally {
+            finalDontRepeat();
+        }
     }
 
     public List<User> getAllUsers() {
