@@ -6,8 +6,8 @@ public class Main {
     public static void main(String[] args) {
         // реализуйте алгоритм здесь
         //create table
-        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-        userDaoJDBC.createUsersTable();
+//        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+//        userDaoJDBC.createUsersTable();
 
         //drop table
 //        UserDaoJDBCImpl userDaoJDBC1 = new UserDaoJDBCImpl();
@@ -17,8 +17,12 @@ public class Main {
 //        UserDaoJDBCImpl userDaoJDBC2 = new UserDaoJDBCImpl();
 //        userDaoJDBC2.cleanUsersTable();
 
-        UserDaoJDBCImpl userDaoJDBC3 = new UserDaoJDBCImpl();
-        userDaoJDBC3.saveUser("Ivan", "Vas", (byte)35);
+        //add user
+//        UserDaoJDBCImpl userDaoJDBC3 = new UserDaoJDBCImpl();
+//        userDaoJDBC3.saveUser("Test", "You", (byte)80);
+
+        UserDaoJDBCImpl userDaoJDBC4 = new UserDaoJDBCImpl();
+        userDaoJDBC4.removeUserById(1);
 
     }
 }

@@ -12,7 +12,7 @@ public class Util {
     // Connect to MySQL
     public static Connection getMySQLConnection() throws SQLException, ClassNotFoundException {
 
-        String propertyPath = "C:\\java\\Kata\\PreProject\\1\\src\\main\\resources\\config.properties";
+        String propertyPath = "C:\\DISK D\\Java\\preProject\\1\\src\\main\\resources\\config.properties";
 
 
 //        String hostName = "localhost";
