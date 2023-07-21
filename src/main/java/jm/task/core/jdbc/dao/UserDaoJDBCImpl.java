@@ -40,10 +40,11 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException se) {
             se.printStackTrace();
 
-        } finally {
-            //finally block used to close resources
-            finalDontRepeat();
         }
+//        finally {
+//            //finally block used to close resources
+//            finalDontRepeat();
+//        }
     }
 
     public void dropUsersTable() {
@@ -58,10 +59,11 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("-------------------------------------");
         } catch (SQLException se) {
             se.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            finalDontRepeat();
         }
+//        finally {
+//            //finally block used to close resources
+//            finalDontRepeat();
+//        }
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -78,10 +80,11 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException sqle) {
 //            System.out.println("User added exception");
             sqle.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            finalDontRepeat();
         }
+//        finally {
+//            //finally block used to close resources
+//            finalDontRepeat();
+//        }
     }
 
     public void removeUserById(long id) {
@@ -95,9 +98,10 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException sqle) {
             System.out.println("Remove user not happened");
             sqle.printStackTrace();
-        } finally {
-            finalDontRepeat();
         }
+//        finally {
+//            finalDontRepeat();
+//        }
     }
 
     public List<User> getAllUsers() {
@@ -123,10 +127,11 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException sqle) {
             System.out.println("Get users exception");
             sqle.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            finalDontRepeat();
         }
+//        finally {
+//            //finally block used to close resources
+//            finalDontRepeat();
+//        }
         return users;
     }
 
@@ -140,10 +145,11 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("------------------------------");
         } catch (SQLException sqle) {
             System.out.println("Clean table exception");
-        } finally {
-            //finally block used to close resources
-            finalDontRepeat();
         }
+//        finally {
+//            //finally block used to close resources
+//            finalDontRepeat();
+//        }
     }
 
     public void finalDontRepeat() {
