@@ -1,6 +1,7 @@
 package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
@@ -8,7 +9,7 @@ public class Main {
         // реализуйте алгоритм здесь
 
         //1 create table
-        UserServiceImpl userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
         userService.createUsersTable();
 //
 //        //2 add 4 users

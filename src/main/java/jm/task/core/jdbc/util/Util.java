@@ -11,19 +11,20 @@ public class Util {
     // реализуйте настройку соеденения с БД
     // Connect to MySQL
 
-    static final String connectionURL = "jdbc:mysql://localhost:3306/sys";
+    private static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/sys";
+    private static final String USER_NAME = "root";
+    private static final String PASSWORD = "root";
+
     public static Connection getMySQLConnection() {
-        String userName = "root";
-        String password = "root";
+        Connection conn = null;
         try {
-            Connection conn = DriverManager.getConnection(connectionURL, userName, password);
+            conn = DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
             System.out.println("Connection to DB successful");
             System.out.println("---------------------------------");
-            return conn;
         } catch (SQLException e) {
             System.out.println("Connection exception");
             e.printStackTrace();
         }
-        return null;
+        return conn;
     }
 }

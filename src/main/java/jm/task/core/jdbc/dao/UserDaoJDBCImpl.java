@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Statement stmt = null;
-
+    private final Connection CONNECTION = Util.getMySQLConnection();
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
         System.out.println("Creating table in given database...");
-        try (Connection conn = Util.getMySQLConnection()){
-            if(conn != null) {
-                stmt = conn.createStatement();
+        try (Statement stmt = CONNECTION.createStatement()){
+            if(CONNECTION != null) {
                 stmt.executeUpdate("CREATE TABLE IF NOT EXISTS REGISTRATION " +
                         "(id INTEGER NOT NULL AUTO_INCREMENT, " +
                         " first VARCHAR(255), " +
@@ -34,9 +32,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         System.out.println("Dropping table in given database...");
-        try (Connection conn = Util.getMySQLConnection()){
-            if (conn != null) {
-                stmt = conn.createStatement();
+        try (Statement stmt = CONNECTION.createStatement()){
+            if (CONNECTION != null) {
                 stmt.executeUpdate("DROP TABLE IF EXISTS REGISTRATION");
                 System.out.println("Dropped table in given database...");
                 System.out.println("-------------------------------------");
@@ -47,11 +44,11 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection conn = Util.getMySQLConnection()){
-            if (conn != null) {
+        try {
+            if (CONNECTION != null) {
                 System.out.println("Starting add user...");
                 PreparedStatement prepStmt =
-                        conn.prepareStatement("INSERT INTO registration(first, last, age) VALUES (?, ?, ?)");
+                        CONNECTION.prepareStatement("INSERT INTO registration(first, last, age) VALUES (?, ?, ?)");
                 prepStmt.setString(1, name);
                 prepStmt.setString(2, lastName);
                 prepStmt.setByte(3, age);
@@ -65,10 +62,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try (Connection conn = Util.getMySQLConnection()){
-            if (conn != null) {
+        try {
+            if (CONNECTION != null) {
                 System.out.println("Remove user started...");
-                PreparedStatement pstmt = conn.prepareStatement("DELETE FROM registration WHERE id=?");
+                PreparedStatement pstmt = CONNECTION.prepareStatement("DELETE FROM registration WHERE id=?");
                 pstmt.setLong(1, id);
                 pstmt.executeUpdate();
                 System.out.println("Remove user is done");
@@ -82,11 +79,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
 
         List<User> users = new ArrayList<>();
-        try (Connection conn = Util.getMySQLConnection()){
-            if (conn != null) {
+        try (Statement stmt = CONNECTION.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM registration")){
+            if (CONNECTION != null) {
                 System.out.println("Getting all users...");
-                stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM registration");
                 while (rs.next()) {
                     long id = rs.getInt(1);
                     String name = rs.getString(2);
@@ -108,10 +104,9 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Connection conn = Util.getMySQLConnection()){
-            if (conn != null) {
+        try (Statement stmt = CONNECTION.createStatement();){
+            if (CONNECTION != null) {
                 System.out.println("Started clean table...");
-                stmt = conn.createStatement();
                 stmt.executeUpdate("TRUNCATE TABLE registration");
                 System.out.println("cleaned table successful");
                 System.out.println("------------------------------");
