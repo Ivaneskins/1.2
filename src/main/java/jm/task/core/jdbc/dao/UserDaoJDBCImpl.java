@@ -8,22 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private final Connection CONNECTION = Util.getMySQLConnection();
+    public static Connection CONNECTION = Util.getMySQLConnection();
+
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        System.out.println("Creating table in given database...");
-        try (Statement stmt = CONNECTION.createStatement()){
+        try (Statement statement = CONNECTION.createStatement()){
             if(CONNECTION != null) {
-                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS REGISTRATION " +
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS REGISTRATION " +
                         "(id INTEGER NOT NULL AUTO_INCREMENT, " +
                         " first VARCHAR(255), " +
                         " last VARCHAR(255), " +
                         " age INTEGER, " +
                         " PRIMARY KEY (id))");
-                System.out.println("Created table in given database...");
-                System.out.println("-------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,30 +29,24 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        System.out.println("Dropping table in given database...");
-        try (Statement stmt = CONNECTION.createStatement()){
+        try (Statement statement = CONNECTION.createStatement()){
             if (CONNECTION != null) {
-                stmt.executeUpdate("DROP TABLE IF EXISTS REGISTRATION");
-                System.out.println("Dropped table in given database...");
-                System.out.println("-------------------------------------");
+                statement.executeUpdate("DROP TABLE IF EXISTS REGISTRATION");
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
         try {
             if (CONNECTION != null) {
-                System.out.println("Starting add user...");
-                PreparedStatement prepStmt =
+                PreparedStatement preparedStatement =
                         CONNECTION.prepareStatement("INSERT INTO registration(first, last, age) VALUES (?, ?, ?)");
-                prepStmt.setString(1, name);
-                prepStmt.setString(2, lastName);
-                prepStmt.setByte(3, age);
-                prepStmt.executeUpdate();
-                System.out.println("User added successful");
-                System.out.println("------------------------------");
+                preparedStatement.setString(1, name);
+                preparedStatement.setString(2, lastName);
+                preparedStatement.setByte(3, age);
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,25 +56,21 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         try {
             if (CONNECTION != null) {
-                System.out.println("Remove user started...");
-                PreparedStatement pstmt = CONNECTION.prepareStatement("DELETE FROM registration WHERE id=?");
-                pstmt.setLong(1, id);
-                pstmt.executeUpdate();
-                System.out.println("Remove user is done");
+                PreparedStatement preparedStatement = CONNECTION.prepareStatement("DELETE FROM registration WHERE id=?");
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
             }
-        } catch (SQLException sqle) {
-            System.out.println("Remove user not happened");
-            sqle.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
 
         List<User> users = new ArrayList<>();
-        try (Statement stmt = CONNECTION.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM registration")){
+        try (Statement statement = CONNECTION.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM registration")){
             if (CONNECTION != null) {
-                System.out.println("Getting all users...");
                 while (rs.next()) {
                     long id = rs.getInt(1);
                     String name = rs.getString(2);
@@ -92,27 +80,21 @@ public class UserDaoJDBCImpl implements UserDao {
                     user.setId(id);
                     users.add(user);
                 }
-                System.out.println("All users get successful");
-                System.out.println("------------------------------");
             }
 
-        } catch (SQLException sqle) {
-            System.out.println("Get users exception");
-            sqle.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return users;
     }
 
     public void cleanUsersTable() {
-        try (Statement stmt = CONNECTION.createStatement();){
+        try (Statement statement = CONNECTION.createStatement();){
             if (CONNECTION != null) {
-                System.out.println("Started clean table...");
-                stmt.executeUpdate("TRUNCATE TABLE registration");
-                System.out.println("cleaned table successful");
-                System.out.println("------------------------------");
+                statement.executeUpdate("TRUNCATE TABLE registration");
             }
         } catch (SQLException e) {
-            System.out.println("Clean table exception");
+            e.printStackTrace();
         }
     }
 }

@@ -1,41 +1,48 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
+
         // реализуйте алгоритм здесь
-
-        //1 create table
         UserService userService = new UserServiceImpl();
+
+        // 1 create table
         userService.createUsersTable();
-//
-//        //2 add 4 users
-//        UserServiceImpl userService3 = new UserServiceImpl();
-//        userService3.saveUser("Ivan", "Vas", (byte)35);
-//        userService3 = new UserServiceImpl();
-//        userService3.saveUser("Sofia", "Vas", (byte)35);
-//        userService3 = new UserServiceImpl();
-//        userService3.saveUser("Fil", "Suv", (byte)35);
-//        userService3 = new UserServiceImpl();
-//        userService3.saveUser("Artem", "Ki", (byte)35);
 
-        //3 get all users
-//        UserServiceImpl userService5 = new UserServiceImpl();
-//        userService5.getAllUsers().stream().forEach(System.out::println);
+        // 2 add 4 users
+        userService.saveUser("Ivan", "Vas", (byte)35);
+        userService.saveUser("Sofia", "Vas", (byte)35);
+        userService.saveUser("Fil", "Suv", (byte)35);
+        userService.saveUser("Artem", "Ki", (byte)35);
 
-//        4 clean table
-//        UserServiceImpl userService2 = new UserServiceImpl();
-//        userService2.cleanUsersTable();
+        // 3 get all users
+        userService.getAllUsers().stream().forEach(System.out::println);
 
-//        5 drop table
-//        UserServiceImpl userService1 = new UserServiceImpl();
-//        userService1.dropUsersTable();
+        // 4 clean table
+        userService.cleanUsersTable();
 
-        //Delete user by id
-//        UserServiceImpl userService4 = new UserServiceImpl();
-//        userService4.removeUserById(20);
+        // 5 drop table
+        userService.dropUsersTable();
+
+        // close resources
+        if (UserDaoJDBCImpl.CONNECTION != null) {
+            try {
+                UserDaoJDBCImpl.CONNECTION.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+            //Delete user by id
+//        userService.removeUserById(1L);
     }
 }
