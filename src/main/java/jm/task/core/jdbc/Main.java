@@ -1,16 +1,33 @@
 package jm.task.core.jdbc;
 
+
+
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
+import org.hibernate.Session;
 
 public class Main {
     public static void main(String[] args) {
+
+        UserService userService = new UserServiceImpl();
+        userService.createUsersTable();
+
+//        userService.dropUsersTable();
+
+        userService.saveUser("Ivan", "Vas", (byte)35);
+
+        userService.getAllUsers();
+
+//        userService.removeUserById(2);
+
+
         // реализуйте алгоритм здесь
 
         //1 create table
-        UserService userService = new UserServiceImpl();
-        userService.createUsersTable();
+//        UserService userService = new UserServiceImpl();
+//        userService.createUsersTable();
 //
 //        //2 add 4 users
 //        UserServiceImpl userService3 = new UserServiceImpl();
