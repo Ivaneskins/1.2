@@ -7,17 +7,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
-    // Connect to MySQL
-
     private static SessionFactory sessionFactory;
 
     private static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/sys";
@@ -25,16 +20,13 @@ public class Util {
     private static final String PASSWORD = "root";
 
     public static Connection getMySQLConnection() {
-        Connection conn = null;
+        Connection connection = null;
         try {
-            conn = DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
-            System.out.println("Connection to DB successful");
-            System.out.println("---------------------------------");
+            connection = DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
         } catch (SQLException e) {
-            System.out.println("Connection exception");
             e.printStackTrace();
         }
-        return conn;
+        return connection;
     }
 
     public static SessionFactory getSessionFactory() {
@@ -42,10 +34,8 @@ public class Util {
             try {
                 Configuration configuration = new Configuration();
 
-                // Hibernate settings equivalent to hibernate.cfg.xml's properties
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-//                settings.put(Environment.URL, "jdbc:mysql://localhost:3306/hibernate_db?useSSL=false");
                 settings.put(Environment.URL, "jdbc:mysql://localhost:3306/sys?useSSL=false");
                 settings.put(Environment.USER, "root");
                 settings.put(Environment.PASS, "root");
@@ -68,8 +58,4 @@ public class Util {
         }
         return sessionFactory;
     }
-
-
-
-
 }

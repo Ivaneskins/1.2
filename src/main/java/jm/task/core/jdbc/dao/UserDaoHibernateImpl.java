@@ -3,17 +3,9 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
+import javax.persistence.Query;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -36,6 +28,8 @@ public class UserDaoHibernateImpl implements UserDao {
                             " PRIMARY KEY (id))")
                     .executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -47,6 +41,8 @@ public class UserDaoHibernateImpl implements UserDao {
                             ("DROP TABLE IF EXISTS users")
                     .executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -56,6 +52,8 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             session.save(new User(name, lastName, age));
             session.getTransaction().commit();
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
         }
     }
 
@@ -66,34 +64,30 @@ public class UserDaoHibernateImpl implements UserDao {
             User userToDelete = session.get(User.class, id);
             session.delete(userToDelete);
             session.getTransaction().commit();
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
+        List<User> users;
         try(Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-            Root<User> root = criteriaQuery.from(User.class);
-            criteriaQuery.select(root);
-
-            users = session.createQuery(criteriaQuery).getResultList();
-            users.stream().forEach(System.out::println);
-            session.getTransaction().commit();
-
+            Query query = session.createQuery("FROM User");
+            users = query.getResultList();
         }
+        users.forEach(System.out::println);
         return users;
     }
 
     @Override
     public void cleanUsersTable() {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "DELETE FROM User";
             session.beginTransaction();
-            session.createQuery(hql).executeUpdate();
+            session.createQuery("DELETE FROM User").executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+            sessionFactory.getCurrentSession().getTransaction().rollback();
         }
     }
 }
